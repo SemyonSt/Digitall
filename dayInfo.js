@@ -1,28 +1,41 @@
-const normolizeDate = (date) => {
-    const masDate = date.split('.')
-    const [number, mounth, year] = masDate;
-    return [mounth, number, year]
-};
-
-const getDayInfo = (day) => {
-    const [mounth, number, year] = normolizeDate(day)
-    const date = new Date(normolizeDate(day));
-
-    const startTime = new Date(`${mounth}.01.${year}`).getTime();
-    const nowTime = date.getTime();
-    const pastTime = nowTime - startTime;
-
-    const hourOfMillisecs = 3600000;
-    const hoursOfOneWeek = 168;
-    
-    const week = pastTime / hourOfMillisecs / hoursOfOneWeek + 1;
-
-    
-    const monthA = 'Января,Февраля,Марта,Апреля,Мая,Июня,Июля,Агуста,Сентября,Октябя,Ноября,Декабря'.split(',');
-    const weekDay = 'Понедельник,Вторник,Среда,Четверг,Пятница,Суббота,Воскресенье'.split(',');
-    
-    console.log(`${weekDay[date.getDay()-1]}, ${week} неделя ${monthA[date.getMonth()]} ${year} года`); 
-};
+const dateFormat = (date) => {
+    const split = date.split('.');
+    let [month, day, year] = split;
+    const temp = month;
+    month = day;
+    day = temp;
+    return [month, day, year].join('.');
+  };
+  
+  const getDayName = (number) => {
+    const days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    return days[number.getDay()];
+  };
+  
+  const getWeekNum = (date) => {
+    const currentDate = date.getDate();
+    const weekOfMonth = Math.ceil(((currentDate) / 7));
+    return weekOfMonth;
+  };
+  
+  const getMonthName = (number) => {
+    const months = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля',
+      'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
+    return months[number.getMonth()];
+  };
+  
+  const getYearNum = (number) => number.getFullYear();
+  
+  const getDayInfo = (date) => {
+    const formatDate = dateFormat(date);
+    const newDate = new Date(formatDate);
+    const day = getDayName(newDate);
+    const week = getWeekNum(newDate);
+    const month = getMonthName(newDate);
+    const year = getYearNum(newDate);
+  
+    return console.log(`${day}, ${week} неделя ${month} ${year} года`);
+  };
 
 
 getDayInfo('01.01.2022') // Суббота, 1 неделя Января 2022 года
